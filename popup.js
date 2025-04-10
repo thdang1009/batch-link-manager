@@ -76,11 +76,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const firstUrl = urls[0];
             const newWindow = await chrome.windows.create({ "url": firstUrl, "incognito": incognitoMode.checked });
             for (const url of urls) {
-                await chrome.tabs.create({
-                    url: url,
-                    active: firstUrl === url,
-                    windowId: newWindow.id
-                });
+                if (firstUrl !== url) {
+                    await chrome.tabs.create({
+                        url: url,
+                        active: firstUrl === url,
+                        windowId: newWindow.id
+                    });
+                }
             }
             showStatus(`Successfully opened ${urls.length} URLs`);
         } catch (error) {
