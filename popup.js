@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const urlInput = document.getElementById('urlInput');
     const openUrlsButton = document.getElementById('openUrls');
     const saveTabsButton = document.getElementById('saveTabs');
@@ -54,11 +54,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
+            const firstUrl = urls[0];
+            const newWindow = await chrome.windows.create({ "url": firstUrl, "incognito": incognitoMode.checked });
             for (const url of urls) {
                 await chrome.tabs.create({
                     url: url,
-                    active: false,
-                    incognito: incognitoMode.checked
+                    active: firstUrl === url,
+                    windowId: newWindow.id
                 });
             }
             showStatus(`Successfully opened ${urls.length} URLs`);
@@ -72,18 +74,18 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const tabs = await chrome.tabs.query({ currentWindow: true });
             const urls = tabs.map(tab => tab.url).join('\n');
-            
+
             const filename = `tabs-${getCurrentDate()}.txt`;
-            
+
             const blob = new Blob([urls], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
-            
+
             await chrome.downloads.download({
                 url: url,
                 filename: filename,
                 saveAs: true
             });
-            
+
             showStatus('Tabs saved successfully');
         } catch (error) {
             showStatus('Error saving tabs: ' + error.message, true);
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const tabs = await chrome.tabs.query({ currentWindow: true });
             const urls = tabs.map(tab => tab.url).join('\n');
-            
+
             await navigator.clipboard.writeText(urls);
             showStatus('Tabs copied to clipboard');
         } catch (error) {
