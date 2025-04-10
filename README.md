@@ -23,6 +23,7 @@ This document outlines the requirements for a Chrome extension designed to enhan
     * Opening multiple URLs in new tabs.
     * Providing options to open URLs in normal or incognito mode.
     * Saving URLs of all currently open tabs to a text file in Format A.
+    * Copying URLs of all currently open tabs to clipboard.
     * A user-friendly interface for managing these functions.
 * **Out of Scope:**
     * Advanced URL manipulation (e.g., editing URLs within the extension).
@@ -37,27 +38,34 @@ This document outlines the requirements for a Chrome extension designed to enhan
 * The extension shall allow the user to input a list of URLs in Format A (each URL on a new line) into a designated area within the extension's popup.
 * The extension shall parse the input and extract individual URLs.
 * The extension shall provide a button to "Open All URLs".
-* The extension shall provide an option (e.g., a checkbox or a separate button) to open URLs in incognito mode.
+* The extension shall provide an option (checkbox) to open URLs in incognito mode.
 * The extension shall open each URL in a new tab when the "Open All URLs" button is clicked.
 * The extension shall handle invalid URLs gracefully (e.g., by logging them or skipping them with a notification to the user).
 * The extension should provide visual feedback to the user during the URL opening process (e.g., a loading indicator or counter).
 
 **5.2. Tab Saving:**
 
-* The extension shall provide a button to "Save Current Tabs".
-* When the "Save Current Tabs" button is clicked, the extension shall:
+* The extension shall provide two options for saving current tabs:
+    * "Save to File" button to save URLs to a text file
+    * "Copy to Clipboard" button to copy URLs to clipboard
+* When the "Save to File" button is clicked, the extension shall:
     * Retrieve the URLs of all currently open tabs in the current window.
     * Format the URLs into Format A (each URL on a new line).
     * Prompt the user to save the formatted list of URLs to a text file.
-    * The default filename for the text file should include a timestamp.
+    * The filename for the text file should be in the format: `tabs-YYYY-MM-DD.txt`
+* When the "Copy to Clipboard" button is clicked, the extension shall:
+    * Retrieve the URLs of all currently open tabs in the current window.
+    * Format the URLs into Format A (each URL on a new line).
+    * Copy the formatted list to the clipboard.
+    * Provide feedback to the user about the successful copy operation.
 
 **5.3. User Interface (UI):**
 
 * The extension's popup UI shall be clear, concise, and easy to use.
 * The UI shall include:
     * An area for inputting/displaying the list of URLs.
-    * Buttons for "Open All URLs" and "Save Current Tabs".
-    * An option (checkbox/button) for incognito mode.
+    * Buttons for "Open All URLs", "Save to File", and "Copy to Clipboard".
+    * An option (checkbox) for incognito mode.
     * Clear labels for all buttons and options.
     * Feedback messages to the user (e.g., success/error messages).
 
@@ -74,18 +82,18 @@ This document outlines the requirements for a Chrome extension designed to enhan
 * Format A is defined as a simple text format where each URL is on a separate line.
 * Example:
     ```
-    [https://gemini.google.com/app/f63a087ebb2f4c70?hl=vi](https://gemini.google.com/app/f63a087ebb2f4c70?hl=vi)
-    [https://www.example.com/page2](https://www.example.com/page2)
-    [https://www.otherexample.com/](https://www.otherexample.com/)
+    https://gemini.google.com/app/f63a087ebb2f4c70?hl=vi
+    https://www.example.com/page2
+    https://www.otherexample.com/
     ```
 
-**8.  Future Considerations**
+**8. Future Considerations**
 
 * (Optional) Implement the ability to sort or filter the list of URLs.
 * (Optional) Add functionality to save and load URL lists within the extension (local storage).
 * (Optional) Error handling for duplicate tabs.
 
-**9.  Acceptance Criteria**
+**9. Acceptance Criteria**
 
 * All functional and non-functional requirements are met.
 * The extension is stable and does not produce errors.
