@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const copyTabsButton = document.getElementById('copyTabs');
     const incognitoMode = document.getElementById('incognitoMode');
     const statusDiv = document.getElementById('status');
+    const fileInput = document.getElementById('fileInput');
+    const fileNameDisplay = document.getElementById('fileName');
 
     // Function to show status messages
     function showStatus(message, isError = false) {
@@ -38,6 +40,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = new Date();
         return date.toISOString().split('T')[0];
     }
+
+    // Handle file upload
+    fileInput.addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        fileNameDisplay.textContent = file.name;
+
+        try {
+            const content = await file.text();
+            urlInput.value = content;
+            showStatus('File loaded successfully');
+        } catch (error) {
+            showStatus('Error reading file: ' + error.message, true);
+            fileNameDisplay.textContent = '';
+        }
+    });
 
     // Handle opening URLs
     openUrlsButton.addEventListener('click', async () => {

@@ -32,6 +32,12 @@ h2 {
     border-radius: 6px;
 }
 
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 textarea {
     width: 94%;
     height: 150px;
@@ -41,6 +47,35 @@ textarea {
     resize: vertical;
     font-family: monospace;
     margin-bottom: 10px;
+}
+
+.file-upload {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.file-upload-label:hover {
+    background-color: #e5e5e5;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 
 .options {
