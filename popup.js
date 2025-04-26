@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveTabsButton = document.getElementById('saveTabs');
     const copyTabsButton = document.getElementById('copyTabs');
     const incognitoMode = document.getElementById('incognitoMode');
+    const currentWindow = document.getElementById('currentWindow');
     const statusDiv = document.getElementById('status');
     const fileInput = document.getElementById('fileInput');
     const fileNameDisplay = document.getElementById('fileName');
@@ -73,15 +74,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const firstUrl = urls[0];
-            const newWindow = await chrome.windows.create({ "url": firstUrl, "incognito": incognitoMode.checked });
-            for (const url of urls) {
-                if (firstUrl !== url) {
+            if (currentWindow.checked) {
+                // Open in current window
+                for (let i = 0; i < urls.length; i++) {
                     await chrome.tabs.create({
-                        url: url,
-                        active: firstUrl === url,
-                        windowId: newWindow.id
+                        url: urls[i],
+                        active: i === 0
                     });
+                }
+            } else {
+                // Open in new window (with or without incognito)
+                const firstUrl = urls[0];
+                const newWindow = await chrome.windows.create({
+                    "url": firstUrl,
+                    "incognito": incognitoMode.checked
+                });
+
+                for (const url of urls) {
+                    if (firstUrl !== url) {
+                        await chrome.tabs.create({
+                            url: url,
+                            active: firstUrl === url,
+                            windowId: newWindow.id
+                        });
+                    }
                 }
             }
             showStatus(`Successfully opened ${urls.length} URLs`);
